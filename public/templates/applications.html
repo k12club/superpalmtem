@@ -1,0 +1,1224 @@
+<div class="filter nmb">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 m">
+				<div data-jc="textboxsearch" data-jc-path="applications.filter.search" data-placeholder="@(Type a word)">@(Search applications)</div>
+			</div>
+			<div class="col-md-4 center hidden-sm hidden-xs">
+				@(Your IP address:)
+				<div data-jc="" data-jc-path="su.ip" class="black b" style="font-size:24px"></div>
+			</div>
+			<div class="col-md-4 m">
+				<div class="operations">
+					<button class="operation-button" name="add" title="@(Add application)"><i class="fa fa-plus-circle"></i></button>
+					<button class="operation-button" name="addsubprocess" title="@(Add subprocess)"><i class="fa fa-plug"></i></button>
+					<button class="operation-button" name="analyzator" title="@(Logs analyzator)"><i class="fa fa-bug"></i></button>
+					<button class="operation-button" name="summary" title="@(Summary)"><i class="fa fa-bar-chart"></i></button>
+					<button class="operation-button" name="restart" title="@(Restart all)"><i class="fa fa-refresh"></i></button>
+					<button class="operation-button" name="options" title="@(Options)"><i class="fa fa-server"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="monitoring hidden" data-jc="monitoring" data-jc-path="applications.monitor">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="value"><i class="fa fa-circle green blink fs10"></i><span data-key="online">?</span></div>
+				<div class="key"><i class="fa fa-users"></i>@(Online visitors)</div>
+				<div class="value" data-key="visitors">?</div>
+				<div class="key"><i class="fa fa-users"></i>@(Today visitors)</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="value" data-key="req_month_current">?</div>
+				<div class="key"><i class="fa fa-calendar"></i>@(Current month requests)</div>
+				<div class="value" data-key="req_month_previous">?</div>
+				<div class="key"><i class="fa fa-calendar"></i>@(Previous month requests)</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="value" data-key="req_year_current">?</div>
+				<div class="key"><i class="fa fa-calendar"></i>@(Current year requests)</div>
+				<div class="value" data-key="req_year_previous">?</div>
+				<div class="key"><i class="fa fa-calendar"></i>@(Previous year requests)</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="value" data-key="errors">?</div>
+				<div class="key"><i class="fa fa-bug"></i>@(Errors)</div>
+				<div class="value" data-key="count">?</div>
+				<div class="key"><i class="fa fa-spin fa-refresh"></i>@(Count of monitoring apps)</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-10 col-md-9">
+			<div data-jc="applications" data-jc-path="applications.grid">
+				<script type="text/html">
+					<tr data-search="{{ url }}" class="tr{{ if subprocess }} tr-subprocess{{ fi }}{{ if $.last }} tr-subprocess-last{{ fi }}" data-id="{{ id }}" data-category="{{ category }}">
+						<td class="atd first td-name" data-monitor="{{ monitor }}"><a href="{{ url }}{{ path }}" target="_blank" class="name"><i class="fa fa-bug"></i>{{ url | application-name }}{{ path }}{{ if monitor }}<i class="fa fa-desktop fs10 ml5 silver"></i>{{ fi }}{{ if cluster > 1 }}<span class="badge badge-silver cluster">{{ cluster }}</span>{{ fi }}</a></td>
+						<td class="atd hidden-xs td-mode">{{ if debug }}<i class="fa fa-flask mr5"></i><span class="badge badge-red">@(debug)</span>{{ fi }}</td>
+						<td class="atd"><div data-jc="application-appinfo" data-port="{{ port }}" data-monitor="{{ monitor }}" data-jc-path="applications.info"></div></td>
+						<td class="atd hidden-xs td-port"><span class="badge badge-silver">{{ port }}</span></td>
+						<td class="atd td-buttons" data-id="{{ id }}">
+							<a href="/logs/{{ id }}/" target="_blank" title="@(Show logs)"><i class="fa fa-search"></i></a>
+							<button class="application-button" name="restart" title="@(Restart)"><i class="fa fa-refresh"></i></button>
+							<button class="application-button" name="stop" title="@(Stop)"><i class="fa fa-stop-circle"></i></button>
+							<button class="application-button" name="upload" title="@(Upload package)"><i class="fa fa-cloud-upload"></i></button>
+							<button class="application-button" name="settings" title="@(Settings)"><i class="fa fa-cog"></i></button>
+							<button class="application-button" name="download" title="@(Backup as package)"><i class="fa fa-cloud-download"></i></button>
+							<button class="application-button" name="remove" title="@(Remove)"><i class="fa fa-times-circle"></i></button>
+						</td>
+					</tr>
+				</script>
+			</div>
+		</div>
+		<div class="col-lg-2 col-md-3">
+			<div data-jc="tagger" data-jc-path="applications.stats">
+				<div style="height:6px" class="visible-lg visible-md"></div>
+				<div class="caption"><i class="fa fa-server"></i>@(Memory)</div>
+				<div class="stats">
+					<div><i class="fa fa-square mr5"></i>@(Total)</div>
+					<div data-name="memtotal" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div><i class="fa fa-square mr5 green"></i>@(Free)</div>
+					<div data-name="memfree" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div><i class="fa fa-square mr5 red"></i>@(Used)</div>
+					<div data-name="memused" data-format="n => n.filesize(1)" class="b">...</div>
+				</div>
+				<div data-jc="freeprogress" data-jc-path="applications.stats" data-type="memory"></div>
+				<div class="stats">
+					<div>@(Applications (RSS))</div>
+					<div data-name="memory" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div>@(Count)</div>
+					<div data-name="count">...</div>
+				</div>
+
+				<div class="cpu">
+					<div data-name="cpu">...</div>
+					<div class="fs11">@(CPU utilization (all cores))</div>
+					<div data-jc="freeprogress" data-jc-path="applications.stats" data-type="cpu"></div>
+				</div>
+
+				<div class="caption"><i class="fa fa-hdd-o"></i>@(HDD)</div>
+				<div class="stats mt10">
+					<div>@(Total)</div>
+					<div data-name="hddtotal" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div>@(Free)</div>
+					<div data-name="hddfree" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div>@(Used)</div>
+					<div data-name="hddused" data-format="n => n.filesize(1)" class="b">...</div>
+				</div>
+				<div data-jc="freeprogress" data-jc-path="applications.stats" data-type="hdd"></div>
+
+				<div class="caption"><i class="fa fa-sitemap"></i>@(Network)</div>
+				<div class="stats">
+					<div>@(Open connections)</div>
+					<div><i class="fa fa-circle green blink fs10 mr5"></i><span data-name="networkconnections" data-after="x">.34343..</span></div>
+				</div>
+				<div class="stats">
+					<div>@(Upload)</div>
+					<div data-name="networkupload" data-format="n => n.filesize(1)">...</div>
+				</div>
+				<div class="stats">
+					<div>@(Download)</div>
+					<div data-name="networkdownload" data-format="n => n.filesize(1)">...</div>
+				</div>
+
+				<div data-name="nginx" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-server green"></i>@(Nginx)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="nginx.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="nginx.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_nginx" data-before="v">...</div>
+					</div>
+				</div>
+
+				<div data-name="mongodb" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-database green"></i>@(MongoDB)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="mongodb.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="mongodb.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_mongodb" data-before="v">...</div>
+					</div>
+				</div>
+
+				<div data-name="postgresql" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-database green"></i>@(PostgreSQL)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="postgresql.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="postgresql.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_postgresql" data-before="v">...</div>
+					</div>
+				</div>
+
+				<div data-name="mysql" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-database green"></i>@(MySQL)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="mysql.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="mysql.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_mysql" data-before="v">...</div>
+					</div>
+				</div>
+
+				<div data-name="couchdb" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-database green"></i>@(CouchDB)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="couchdb.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="couchdb.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_couchdb" data-before="v">...</div>
+					</div>
+				</div>
+
+				<div data-name="redis" data-visible="n => n" class="hidden">
+					<br />
+					<div class="caption"><i class="fa fa-database green"></i>@(Redis)</div>
+					<div class="stats mt10">
+						<div>@(CPU)</div>
+						<div data-name="redis.cpu">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Memory)</div>
+						<div data-name="redis.memory" data-format="n => n.filesize(1)">...</div>
+					</div>
+					<div class="stats">
+						<div>@(Version)</div>
+						<div data-name="version_redis" data-before="v">...</div>
+					</div>
+				</div>
+				<hr style="margin:15px 0" />
+				<div class="fs11 b black" data-name="version_server">...</div>
+				<div class="stats mt5">
+					<div>@(Uptime)</div>
+					<div data-name="uptime" data-format="n => Tangular.helpers.uptime(n)">...</div>
+				</div>
+				<div class="stats">
+					<div>@(Node.js)</div>
+					<div data-name="version_node" data-before="v">...</div>
+				</div>
+				<div class="stats hidden" data-visible="n => n" data-name="version_gm">
+					<div>@(GraphicsMagick)</div>
+					<div data-name="version_gm" data-before="v">...</div>
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+</div>
+<br />
+
+<div data-url="/templates/applications-form-analyzator.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-analyzator'" data-reload="applications_analyzator_refresh"></div>
+<div data-url="/templates/applications-form-summary.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-summary'" data-reload="applications_summary_refresh"></div>
+<div data-url="/templates/applications-form-logs.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-logs'" data-reload="applications_logs_refresh"></div>
+<div data-url="/templates/applications-form-backup.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-backup'"></div>
+<div data-url="/templates/applications-form-upload.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-upload'" data-reload="applications_upload_refresh"></div>
+<div data-url="/templates/applications-form-subprocess.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-subprocess'" data-reload="applications_subprocess_refresh"></div>
+<div data-url="/templates/applications-stdout.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications-stdout'"></div>
+<div data-url="/templates/applications-form.html" data-jc="importer" data-jc-path="common.form" data-if="value === 'applications'" data-reload="applications_form_refresh"></div>
+
+<script type="text/html" id="template-monitoring">
+	<table class="keyvalue-table">
+		<tr>
+			<td>
+				<div class="label label-upper">@(Requests)</div>
+				<div class="keyvalue">
+					<div>@(Count)</div>
+					<div>{{ request.request | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Dynamic content)</div>
+					<div>{{ request.web | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Static files)</div>
+					<div>{{ request.file | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Pending)</div>
+					<div class="black">{{ request.pending | format2 }}<i class="fa fa-clock-o ml5"></i></div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Desktop)</div>
+					<div>{{ request.desktop | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Mobile)</div>
+					<div>{{ request.mobile | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(XHR)</div>
+					<div>{{ request.xhr | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(GET)</div>
+					<div>{{ request.get | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(POST)</div>
+					<div>{{ request.post | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(PUT)</div>
+					<div>{{ request.put | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(DELETE)</div>
+					<div>{{ request.delete | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(HEAD)</div>
+					<div>{{ request.head | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Uploads)</div>
+					<div>{{ request.upload | format2 }}</div>
+				</div>
+			</td>
+			<td>
+				<div class="label label-upper">@(Responses)</div>
+				<div class="keyvalue">
+					<div>@(Static files)</div>
+					<div>{{ response.file | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Views)</div>
+					<div>{{ response.view | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(JSON)</div>
+					<div>{{ response.json | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Websockets)</div>
+					<div>{{ response.websocket | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Redirects)</div>
+					<div>{{ response.redirect | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Not modified)</div>
+					<div>{{ response.notModified | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Destroyed)</div>
+					<div>{{ response.destroy | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(400: bad request)</div>
+					<div>{{ response.error400 | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(401: unauthorized)</div>
+					<div>{{ response.error401 | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(404: not found)</div>
+					<div>{{ response.error404 | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(408: timeout)</div>
+					<div>{{ response.error408 | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(439: too large)</div>
+					<div>{{ response.error431 | format2 }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(500: internal error)</div>
+					<div>{{ response.error500 | format2 }}</div>
+				</div>
+			</td>
+			<td>
+				<div class="label label-upper">@(Today visitors)</div>
+				<div class="keyvalue">
+					<div>@(Visitors)</div>
+					<div>{{ webcounter.today.count | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Unique visitors)</div>
+					<div>{{ webcounter.today.unique | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Unique per month)</div>
+					<div>{{ webcounter.today.uniquemonth | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Hits)</div>
+					<div>{{ webcounter.today.hits | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Pages per visitor)</div>
+					<div>{{ webcounter.today.pages | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Direct visitors)</div>
+					<div>{{ webcounter.today.direct | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Social networks)</div>
+					<div>{{ webcounter.today.social | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Search engines)</div>
+					<div>{{ webcounter.today.search | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Advert)</div>
+					<div>{{ webcounter.today.advert | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Robots)</div>
+					<div>{{ webcounter.today.robots | format2 | default('...') }}</div>
+				</div>
+				<hr class="keyvalue-hr" />
+				<div class="keyvalue">
+					<div>@(Desktop)</div>
+					<div>{{ webcounter.today.desktop | format2 | default('...') }}</div>
+				</div>
+				<div class="keyvalue">
+					<div>@(Mobile devices)</div>
+					<div>{{ webcounter.today.mobile | format2 | default('...') }}</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<hr />
+	<div class="row">
+		<div class="col-md-4 center">
+			<div><i class="fa fa-circle {{ if webcounter && webcounter.online }}green{{ else }}red{{ fi }} blink mr5"></i>@(Online visitors)</div>
+			<span class="mt5 badge badge-large {{ if webcounter && webcounter.online }}badge-green{{ else }}badge-red{{ fi }}">{{ webcounter.online | format2 | default('...') }}</span>
+		</div>
+		<div class="col-md-8">
+			<div class="label label-upper">@(Requests)</div>
+			<table class="keyvalue-table keyvalue-table2">
+				<tr>
+					<td>
+						<div class="keyvalue">
+							<div>@(Current month)</div>
+							<div>{{ req.req_month_current | format2 | default('...') }}</div>
+						</div>
+						<div class="keyvalue">
+							<div>@(Previous month)</div>
+							<div>{{ req.req_month_previous | format2 | default('...') }}</div>
+						</div>
+					</td>
+					<td>
+						<div class="keyvalue">
+							<div>@(Current year)</div>
+							<div>{{ req.req_year_current | format2 | default('...') }}</div>
+						</div>
+						<div class="keyvalue">
+							<div>@(Previous year)</div>
+							<div>{{ req.req_year_previous | format2 | default('...') }}</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</script>
+
+<script>
+
+	var applications = {};
+
+	applications.filter = {};
+	applications.filter.page = 1;
+	applications.grid = {};
+	applications.form = {};
+	applications.info = null;
+	applications.stats = {};
+	applications.waiting = false;
+	applications.id = null;          // contains current application (when the user click on some button in the grid)
+	applications.sslexpire = {};
+	applications.merrors = {};
+
+	$(document).on('click', '.application-button', function(e) {
+		var button = $(this);
+		var id = button.parent().attr('data-id');
+		var app = applications.grid.findItem('id', id);
+
+		applications.id = id;
+
+		switch (this.name) {
+			case 'remove':
+				FIND('confirm').confirm('@(Are you sure you want to remove this application?)', ['@(Yes)', '@(Cancel)'], function(index) {
+					if (index)
+						return;
+					SETTER('loading', 'show');
+
+					if (app) {
+						delete applications.sslexpire[app.port];
+						delete applications.merrors[app.id];
+					}
+
+					AJAX('DELETE /api/apps/{0}/remove/'.format(id), function(response) {
+						setTimeout(applications_refresh, 100);
+						success();
+					});
+				});
+				return;
+			case 'restart':
+				applications_restart(id);
+				return;
+			case 'stop':
+				SETTER('loading', 'show');
+				AJAX('GET /api/apps/{0}/stop/'.format(id), function(response) {
+					applications_info();
+					button.closest('tr').removeClass('error');
+					success();
+				});
+				return;
+			case 'upload':
+				SET('common.form', 'applications-upload');
+				return;
+			case 'download':
+				location.href = '/api/apps/{0}/pack/'.format(id);
+				return;
+			case 'logs':
+				SET('common.form', 'applications-logs');
+				return;
+			case 'settings':
+				applications_edit(id, -1);
+				return;
+		}
+	});
+
+	function applications_restart(id, callback) {
+		delete applications.merrors[id];
+		SETTER('loading', 'show');
+		AJAX('GET /api/apps/{0}/restart/'.format(id), function(response) {
+			applications_info();
+			$('tr[data-id="{0}"]'.format(id)).removeClass('error');
+			success();
+			callback && callback();
+		});
+	}
+
+	$(document).on('click', '.operation-button', function() {
+		switch (this.name) {
+
+			case 'summary':
+				SET('common.form', 'applications-summary', 100);
+				break;
+
+			case 'analyzator':
+				SET('common.form', 'applications-analyzator', 100);
+				break;
+
+			case 'add':
+				applications_new();
+				break;
+
+			case 'addsubprocess':
+				applications_newsubprocess();
+				break;
+
+			case 'options':
+				FIND('contextmenu').show('right', this, [{ name: '@(Reconfigure all)', icon: 'fa-retweet', value: 'reconfigure' }, { name: 'Backup server', icon: 'fa-cloud-download', value: 'backup' }, { name: '@(Nginx test)', icon: 'fa-flask', value: 'nginx' }, { name: '@(SuperAdmin logs)', icon: 'fa-file-text-o', value: 'logs' }, { name: '@(Server logins)', icon: 'fa-lock', value: 'last' }, { name: '@(Stop all)', icon: 'fa-stop', value: 'stop' }], function(value) {
+
+					if (value === 'backup') {
+						FIND('confirm').confirm('@(Are you sure you want to create a backup of the whole server?)', ['@(Yes)', '@(Cancel)'], function(index) {
+							if (index)
+								return;
+							SETTER('loading', 'show');
+							SETTER('loading', 'hide', 1000);
+							SET('common.form', 'applications-backup');
+							location.href = '/api/apps/backup/';
+						});
+						return;
+					}
+
+					if (value === 'reconfigure') {
+						FIND('confirm').confirm('@(Are you sure you want to reconfigure all applications?)', ['@(Yes)', '@(Cancel)'], function(index) {
+							if (index)
+								return;
+							SETTER('loading', 'show');
+							applications.waiting = true;
+							applications.sslexpire = {};
+							AJAX('GET /api/apps/reconfigure/', function(response) {
+								applications.waiting = false;
+								applications_info();
+								success();
+							});
+						});
+						return;
+					}
+
+					if (value === 'stop') {
+						FIND('confirm').confirm('@(Are you sure you want to stop all applications?)', ['@(Yes)', '@(Cancel)'], function(index) {
+							if (index)
+								return;
+							SETTER('loading', 'show');
+							applications.waiting = true;
+							AJAX('GET /api/apps/stop/', function(response) {
+								applications.waiting = false;
+								applications_info();
+								success();
+							});
+						});
+						return;
+					}
+
+					if (value === 'stop') {
+						FIND('confirm').confirm('@(Are you sure you want to stop all applications?)', ['@(Yes)', '@(Cancel)'], function(index) {
+							if (index)
+								return;
+							SETTER('loading', 'show');
+							applications.waiting = true;
+							AJAX('GET /api/apps/stop/', function(response) {
+								applications.waiting = false;
+								applications_info();
+								success();
+							});
+						});
+						return;
+					}
+
+					AJAX('GET /api/{0}/'.format(value), 'applications.stdout.lines');
+					SET('common.form', 'applications-stdout');
+				}, -5);
+				break;
+
+			case 'restart':
+				FIND('confirm').confirm('@(Are you sure you want to restart all applications?)', ['@(Yes)', '@(Cancel)'], function(index) {
+					if (index)
+						return;
+					SETTER('loading', 'show');
+					applications.waiting = true;
+					applications.sslexpire = {};
+					applications.merrors = {};
+					AJAX('GET /api/apps/restart/', function(response) {
+						applications.waiting = false;
+						applications_info();
+						success();
+					});
+				});
+				break;
+		}
+	});
+
+	// Watch for changes in product filter
+	WATCH('applications.filter.search', function(path, value) {
+		if (NOTMODIFIED('applications.filter', applications.filter))
+			return;
+
+		if (!value)
+			value = '';
+
+		value = value.toLowerCase();
+		var categories = {};
+
+		FIND('applications', function(component) {
+			component.element.find('tr.tr').each(function(index) {
+				var el = $(this);
+				var search = el.attr('data-search').toLowerCase();
+				var no = value ? search.indexOf(value) === -1 : false;
+				el.toggleClass('hidden', no);
+				if (!no)
+					categories[el.attr('data-category')] = true;
+			});
+			component.element.find('.category,.items').each(function() {
+				$(this).toggleClass('hidden', categories[this.getAttribute('data-category')] === undefined);
+			});
+		})
+	});
+
+	function applications_edit(id, index) {
+		var loading = FIND('loading');
+		loading.show();
+		applications.id = id;
+		AJAX('GET /api/apps/{0}/'.format(id), function(response) {
+
+			loading.hide(500);
+
+			// Error prevention
+			if (response instanceof Array) {
+				FIND('message').warning(response[0].error);
+				return;
+			}
+
+			if (response.memory === 0)
+				response.memory = undefined;
+
+			if (response.subprocess) {
+				SET('applications.subprocess', $.extend({ $index: index }, response), true);
+				SET('common.form', 'applications-subprocess');
+			} else {
+				SET('applications.form', $.extend({ $index: index, sslexpire: applications.sslexpire[response.port] }, response), true);
+				SET('common.form', 'applications');
+			}
+		});
+	}
+
+	function applications_new() {
+		applications.id = null;
+		SET('common.form', 'applications');
+	}
+
+	function applications_newsubprocess() {
+		applications.id = null;
+		SET('common.form', 'applications-subprocess');
+	}
+
+	// Method refreshes grid
+	function applications_refresh(reset) {
+
+		if (reset)
+			applications.filter.page = 1;
+
+		clearTimeout2('applications.refresh');
+
+		AJAX('GET /api/apps/', applications.filter, function(response, err) {
+
+			if (err) {
+				setTimeout2('applications.refresh', applications_refresh, 1000);
+				return;
+			}
+
+			var categories = {};
+
+			applications.filter.search = '';
+			NOTIFY('applications.filter.search');
+			SET('applications.grid', response);
+
+			response.forEach(function(item) {
+				if (item.category)
+					categories[item.category] = true;
+			});
+
+			SET('applications.categories', Object.keys(categories));
+			applications_info();
+			applications_monitor();
+		});
+
+		applications_stats();
+	}
+
+	function applications_reload() {
+		var hash = location.hash;
+		hash && hash.length > 1 && setTimeout(function() {
+			applications_edit(hash.substring(1));
+		}, 500);
+	}
+
+	function applications_init() {
+		applications_refresh(true);
+	}
+
+	function applications_info() {
+
+		var timeout = 6000;
+		clearTimeout(applications.timeout_info);
+
+		if (applications.waiting) {
+			applications.timeout_info = setTimeout(applications_info, timeout);
+			return;
+		}
+
+		AJAX('GET /api/apps/info/', function(response, err) {
+
+			if (err)
+				return;
+
+			SET('applications.info', response);
+			applications.timeout_info = setTimeout(applications_info, timeout);
+
+			var sum = 0;
+			var now = Date.now();
+			var has = false;
+
+			response.forEach(function(item) {
+				sum += item.memory;
+
+				if (item.sslexpire)
+					item.sslexpire = item.sslexpire.parseDate();
+
+				if (!item.sslexpire || applications.sslexpire[item.port])
+					return;
+
+				var diff = (item.sslexpire.getTime() - now) / 1000;
+				var app = applications.grid.findItem('port', item.port);
+
+				applications.sslexpire[item.port] = { type: 1, id: app.id, expire: item.sslexpire };
+				if (diff < 0) {
+					has = true;
+					applications.sslexpire[item.port].type = 2;
+					SETTER('notifications', 'append', 'fa-warning', '@(<b class="red">The certificate is expired</b> for domain <a href="{0}" target="_blank">{0}</a>, you have to renew it.)'.format(app.url), item.sslexpire, function() {
+						applications_edit(app.id, -1);
+					}, '#D53F39');
+				} else if (diff <= 259200) {
+					has = true;
+					applications.sslexpire[item.port].type = 3;
+					SETTER('notifications', 'append', 'fa-clock-o', '@(<b>The certificate will expire</b> for domain <a href="{0}" target="_blank">{0}</a> in short time, you have to renew it.)'.format(app.url), item.sslexpire, function() {
+						applications_edit(app.id, -1);
+					}, '#E9573F');
+				}
+			});
+
+			has && SETTER('audio', 'play', '/error.mp3');
+			var elements = FIND('applications').element.find('.tr');
+
+			Object.keys(applications.sslexpire).forEach(function(key) {
+				var obj = applications.sslexpire[key];
+				if (obj.type === 1)
+					return;
+				var tr = elements.filter('[data-id="{0}"]'.format(obj.id));
+				tr.find('.ssl').toggleClass('ssl-expired', obj.type === 2).toggleClass('ssl-expire', obj.type === 3);
+			});
+
+			SET('applications.stats.memory', sum);
+			SET('applications.stats.count', response.length);
+		});
+	}
+
+	function applications_stats() {
+		clearTimeout(applications.timeout_stats);
+		AJAX('GET /api/stats/', function(response) {
+			EXTEND('applications.stats', response);
+			applications.timeout_stats = setTimeout(applications_stats, 10000);
+		});
+	}
+
+	function applications_monitor() {
+		var timeout = 30000;
+		clearTimeout(applications.timeout_monitor);
+
+		if (applications.waiting) {
+			applications.timeout_monitor = setTimeout(applications_monitor, timeout);
+			return;
+		}
+
+		AJAX('GET /api/apps/monitor/', function(response) {
+			EXTEND('applications.monitor', response);
+			applications.timeout_monitor = setTimeout(applications_monitor, timeout);
+		});
+	}
+
+	WATCH('applications.monitor', function(path, response) {
+		$('.tr[data-id]').each(function() {
+			var tr = $(this);
+			var id = tr.attr('data-id');
+			var item = response[id];
+			tr.toggleClass('error', item ? item.errors : false);
+		});
+	});
+
+	COMPONENT('applications', function() {
+
+		var self = this;
+		var recompile = false;
+		var template_table = '<div class="items" data-category="{1}"><table border="0">{0}</table></div>';
+		var template_category = '<div class="category" data-category="{0}"><span>{1}x</span><i class="fa fa-folder-o"></i>{0}</div>';
+		var REG_CLEANURL = /^(http|https)\:\/\//g;
+		var template_monitor;
+		var infotimeout;
+
+		self.readonly();
+
+		self.make = function() {
+
+			template_monitor = Tangular.compile($('#template-monitoring').html());
+			var element = self.element.find('script');
+
+			if (!element.length) {
+				element = self.element;
+				self.element = self.element.parent();
+			}
+
+			var html = element.html();
+			element.remove();
+			self.template = Tangular.compile(html);
+			recompile = html.indexOf('data-jc="') !== -1;
+			self.element.addClass('applications');
+
+			!isMOBILE && self.element.on('mouseenter mouseleave', '.td-name', function(e) {
+				var info = FIND('info');
+				clearTimeout(infotimeout);
+
+				if (e.type === 'mouseenter' && this.getAttribute('data-monitor')) {
+					var data = applications.monitor[$(this).parent().attr('data-id')];
+					if (data) {
+						var el = this;
+						infotimeout = setTimeout(function() {
+							data.req = applications_app_reqstats(data.reqstats);
+							info.show('left', el, template_monitor(data));
+						}, 600);
+						return;
+					}
+				}
+
+				info.hide();
+			});
+		};
+
+		self.setter = function(value) {
+
+			if (!value || !value.length) {
+				self.empty();
+				return;
+			}
+
+			var categories = {};
+			var subprocesses = {};
+
+			self.toggle('hidden', true);
+			self.empty();
+
+			value.forEach(function(item) {
+
+				if (item.subprocess) {
+					if (!subprocesses[item.url])
+						subprocesses[item.url] = [];
+					subprocesses[item.url].push(item);
+					return;
+				}
+
+				if (categories[item.category])
+					categories[item.category].push(item);
+				else
+					categories[item.category] = [item];
+			});
+
+			var keys = Object.keys(categories);
+
+			keys.sort(function(a, b) {
+				return a.substring(0, 15).toLowerCase().localeCompare(b.substring(0, 15).toLowerCase());
+			});
+
+			keys.forEach(function(name) {
+
+				var builder = [];
+				var items = categories[name];
+				var memory = 0;
+
+				items.sort(function(a, b) {
+					var an = a.url.replace(REG_CLEANURL, '').substring(0, 15).toLowerCase();
+					var bn = b.url.replace(REG_CLEANURL, '').substring(0, 15).toLowerCase();
+					return an.localeCompare(bn);
+				});
+
+				items.forEach(function(item, index) {
+					builder.push(self.template(item));
+					var sub = subprocesses[item.url];
+					if (!sub)
+						return;
+					var length = sub.length - 1;
+					sub.forEach(function(item, index) {
+						memory += item.memory.parseFloat();
+						builder.push(self.template(item, { last: index === length }));
+					});
+				});
+
+				self.element.append(template_category.format(name, builder.length) + template_table.format(builder.join(''), name));
+			});
+
+			if (recompile)
+			   jC.compile();
+
+			setTimeout(function() {
+				self.toggle('hidden', false);
+			}, 100);
+		};
+	});
+
+	COMPONENT('application-appinfo', function() {
+
+		var self = this;
+		var port = self.attr('data-port').parseInt();
+		var empty = '<div class="offline">@(OFFLINE)</div>';
+		var parent;
+
+		self.template = Tangular.compile('<table><tr><td class="visible-lg">{{ time | application-uptime }}</td><td class="visible-lg visible-xs ttd-hdd">{{ hdd | filesize(0) }}<i class="fa fa-folder-o ml5"></i></td><td class="ttd-cpu visible-xs visible-lg">{{ cpu | application-round }}{{ cpu | application-progress(\'cpu\', 100) }}</td><td class="ttd-memory">{{ memory | filesize(1) }}</td><td class="ttd-files visible-lg">{{ openfiles }}<i class="fa fa-hdd-o ml5"></i></td><td class="ttd-connections visible-xs visible-lg{{ if connections > 0 }} green{{ fi }}">{{ connections }}<i class="fa fa-globe ml5"></i></td></tr></table>');
+
+		self.make = function() {
+			parent = self.element.closest('tr');
+		};
+
+		self.readonly();
+
+		self.setter = function(value) {
+
+			if (!value)
+				return self.empty();
+
+			var obj = value.findItem('port', port);
+			if (obj)
+				self.html(self.template(obj));
+			else
+				self.html(empty);
+			parent.toggleClass('stopped', obj ? false : true);
+		};
+	});
+
+	Tangular.register('application-name', function(value) {
+		var https = value.substring(0, 8) === 'https://';
+		return (!this.subprocess && https ? '<span class="ssl">ssl</span>' : '') + value.replace(/(http|https)\:\/\//g, '');
+	});
+
+	Tangular.register('application-uptime', function(value) {
+		if (value == null)
+			return '';
+		var arr = value.split('-');
+		return arr.length === 1 ? arr[0] : '<span class="time">{0}</span>'.format(arr[0].parseInt().pluralize('# days', '# day', '# days', '# days'));
+	});
+
+	Tangular.register('application-round', function(value) {
+		if (value == null)
+			return '';
+		var m = value.match(/[0-9\.]+/g);
+		return m ? Math.round(m.toString().parseFloat()) + value.replace(m, '') : value;
+	});
+
+	Tangular.register('application-progress', function(value, type, max) {
+
+		if (value == null)
+			return '';
+
+		if (this.cluster > 1)
+			max *= this.cluster;
+
+		var current = Math.round(typeof(value) === 'number' ? value : value.replace(/(\s|\%|MB)?/g, '').parseFloat());
+		var percentage = (current / max) * 100;
+		if (percentage > 100)
+			percentage = 100;
+
+		return '<div class="progress"><div style="background-color:{1};width:{0}%"></div></div>'.format(percentage, percentage < 20 ? 'green' : percentage < 60 ? 'orange' : 'red');
+	});
+
+	Tangular.register('format2', function(value) {
+		if (value == null)
+			return '...';
+		if (value >= 1000000)
+			return (value / 1000000).format(1) + ' M';
+		if (value >= 1000)
+			return (value / 1000).format(1) + ' K';
+		return value.format(0);
+	});
+
+	COMPONENT('monitoring', function() {
+		var self = this;
+
+		self.readonly();
+
+		self.setter = function(value, path) {
+
+			if (!value)
+				return self.toggle('hidden', true);
+
+			var values = SINGLETON(self.id);
+			values.online = 0;
+			values.visitors = 0;
+			values.count = 0;
+			values.errors = 0;
+
+			var dt = new Date();
+			var current_m = dt.format('yyyy-MM');
+			var previous_m = dt.add('-1 month').format('yyyy-MM');
+			var current_y = dt.format('yyyy');
+			var previous_y = dt.add('-1 year').format('yyyy');
+			var has = false;
+
+			values.req_year_current = 0;
+			values.req_year_previous = 0;
+			values.req_month_current = 0;
+			values.req_month_previous = 0;
+
+			Object.keys(value).forEach(function(key) {
+				var item = value[key];
+
+				values.count++;
+
+				if (item.errors) {
+					values.errors++;
+
+					if (!applications.merrors[key]) {
+						applications.merrors[key] = true;
+						has = true;
+						(function(key) {
+							var app = applications.grid.findItem('id', key);
+							app && SETTER('notifications', 'append', 'fa-bug', '@(The application {1} <b class="red">contains errors</b> - <a href="/logs/{0}/" target="_blank">show logs</a>.)'.format(app.id, app.url), new Date(), null, '#D53F39');
+						})(key);
+					}
+				}
+
+				if (item.webcounter) {
+					values.online += item.webcounter.online;
+					values.visitors += item.webcounter.today.count;
+				}
+
+				if (!item.reqstats)
+					return;
+
+				Object.keys(item.reqstats).forEach(function(key) {
+					var year = key.substring(0, 4);
+					var value = item.reqstats[key].request;
+					if (year === current_y)
+						values.req_year_current += value;
+					if (year === previous_y)
+						values.req_year_previous += value;
+					if (key === current_m)
+						values.req_month_current += value;
+					if (key === previous_m)
+						values.req_month_previous += value;
+				});
+			});
+
+			has && SETTER('audio', 'play', '/error.mp3');
+
+			// update stats
+			self.find('[data-key]').each(function() {
+				var el = $(this);
+				var key = el.attr('data-key');
+				switch (key) {
+					case 'online':
+					case 'visitors':
+					case 'count':
+					case 'errors':
+					case 'req_year_current':
+					case 'req_year_previous':
+					case 'req_month_current':
+					case 'req_month_previous':
+						return el.html(Tangular.helpers.format2(values[key]));
+				}
+			});
+
+			self.toggle('hidden', false);
+		};
+	});
+
+	COMPONENT('freeprogress', function() {
+		var self = this;
+		var progress;
+		var width = {};
+		var css = {};
+
+		self.readonly();
+		self.make = function() {
+			self.element.css({ height: '3px', margin: '8px 0 {0}'.format(self.attr('data-type') === 'memory' ? '8px' : '15px'), 'background-color': '#F0F0F0' });
+			self.append('<div style="height:3px;width:0"></div>');
+			progress = self.find('div');
+		};
+
+		self.setter = function(value) {
+
+			if (!value)
+				return;
+
+			var val = 0;
+
+			switch (self.attr('data-type')) {
+				case 'memory':
+					val = (value.memused / value.memtotal) * 100;
+					break;
+				case 'hdd':
+					val = (value.hddused / value.hddtotal) * 100;
+					break;
+				case 'cpu':
+					val = value.cpu ? value.cpu.parseFloat() : 0;
+					break;
+			}
+
+			width.width = val >= 0 ? Math.round(val) + '%' : '0';
+
+			css['background-color'] = val < 20 ? '#8CC152' : val < 50 ? '#F6BB42' : val < 70 ? '#E9573F' : '#DA4453';
+			progress.animate(width, 300);
+			progress.css(css);
+		};
+	});
+
+	function applications_app_reqstats(reqstats) {
+
+		var values = {};
+		if (!reqstats)
+			return values;
+
+		var dt = new Date();
+		var current_m = dt.format('yyyy-MM');
+		var previous_m = dt.add('-1 month').format('yyyy-MM');
+		var current_y = dt.format('yyyy');
+		var previous_y = dt.add('-1 year').format('yyyy');
+
+		values.req_year_current = 0;
+		values.req_year_previous = 0;
+		values.req_month_current = 0;
+		values.req_month_previous = 0;
+
+		Object.keys(reqstats).forEach(function(key) {
+			var year = key.substring(0, 4);
+			var value = reqstats[key].request;
+			if (year === current_y)
+				values.req_year_current += value;
+			if (year === previous_y)
+				values.req_year_previous += value;
+			if (key === current_m)
+				values.req_month_current += value;
+			if (key === previous_m)
+				values.req_month_previous += value;
+		});
+
+		return values;
+	}
+
+	if (!CACHE('analyzator')) {
+		CACHE('analyzator', '1', '4 days');
+		SETTER('notifications', 'append', 'fa-bug', '@(More than 3 days you don\'t have launched <b>Logs analyzator</b>. Run it now.)', function() {
+			SET('common.form', 'applications-analyzator');
+		});
+	}
+
+</script>
